@@ -21,13 +21,21 @@ module OmniAuth
       end
 
       extra do
-        { raw_info: raw_info }
+        { 
+          raw_info: raw_info,
+          extra_info: extra_info
+        }
       end
 
       def raw_info
         @raw_info ||= options.scope.split(/\s+/).include?('openid') ?
           JSON.parse(access_token.get("https://#{accounts_domain}/v1/openid_connect/userinfo").body) :
           {}
+      end
+
+      def extra_info
+        require 'pry'; binding.pry
+        @extra_info ||= deep_symbolize(access_token.get("https://sandbox-quickbooks.api.intuit.com/v3/company/#{request.params['realmId']}/companyinfo/#{request.params['realmId']}", { headers: {'Accept' => 'application/json'}}).parsed)
       end
 
       def callback_url
