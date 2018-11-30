@@ -34,7 +34,6 @@ module OmniAuth
       end
 
       def extra_info
-        require 'pry'; binding.pry
         @extra_info ||= deep_symbolize(access_token.get("https://sandbox-quickbooks.api.intuit.com/v3/company/#{request.params['realmId']}/companyinfo/#{request.params['realmId']}", { headers: {'Accept' => 'application/json'}}).parsed)
       end
 
